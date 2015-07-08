@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Vector Animation</title>
+	<script src="Vector.js"></script>
+	<script src="Thing.js"></script>
+</head>
+<style>
+div {
+	position: absolute;
+	left: 100px;
+	top: 100px;
+	background: #000;
+	width: 30px;
+	height: 30px;
+	border-radius: 100%;
+}
+.planet {
+	background: #ccc;
+}
+</style>
+<body>
+
+<div class="thing"></div>
+<div class="planet"></div>
+<div class="planet planet2"></div>
+
+<script>
+
+(function() {
+	var timer = {};
+	var planets = document.querySelectorAll('.planet');
+	var el = document.querySelector('.thing');
+	var elStyle = el.style;
+	var planetLocation = [ { x: 300, y: 300, g: 2 } ];
+
+	var callback =  function() { clearInterval(timer); }
+
+	var thing = new Thing({ location: { x: 100, y: 100 }, endpoint :planetLocation[0], callback: callback});
+
+	for(var i = 0; i < planetLocation.length; i++) {
+		planets[i].style.left = planetLocation[i].x + 'px';
+		planets[i].style.top  = planetLocation[i].y + 'px';
+	}
+
+	timer = setInterval(function() {
+		for(var i = 0; i < planetLocation.length; i++) {
+			thing.arrive(planetLocation[i]);
+		}
+		var pos = thing.update().getPoint();
+
+		elStyle.left = pos.x + 'px';
+		elStyle.top  = pos.y + 'px';
+	}, 33);
+
+
+})();
+
+</script>
+
+	
+</body>
+</html>
